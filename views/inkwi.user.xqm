@@ -5,7 +5,7 @@ import module namespace config="app/config" at "../functions/config.xqm";
 
 declare 
   %rest:GET
-  %rest:path( "/inkwi/u" )
+  %rest:path( "/unoi/u" )
   %output:method( "html" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
 function inkwi:main(){
