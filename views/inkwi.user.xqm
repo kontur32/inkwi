@@ -1,7 +1,6 @@
 module namespace inkwi = "inkwi/user";
 
 import module namespace funct="funct" at "../functions/functions.xqm";
-import module namespace config="app/config" at "../functions/config.xqm";
 
 declare 
   %rest:GET
@@ -12,7 +11,7 @@ function inkwi:main(){
     let $params :=    
        map{
         'header' : funct:tpl2( 'header', map{} ),
-        'content' : funct:tpl2( 'content', map{ 'параметр2' : 'ДРУГОЕ ЗНАЧЕНИЕ'} ),
+        'content' : funct:tpl2( 'content', map{} ),
         'footer' : funct:tpl2( 'footer', map{} )
       }
     return

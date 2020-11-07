@@ -1,7 +1,6 @@
 module namespace inkwi = "inkwi";
 
 import module namespace funct="funct" at "../functions/functions.xqm";
-import module namespace config="app/config" at "../functions/config.xqm";
 
 declare 
   %rest:GET
