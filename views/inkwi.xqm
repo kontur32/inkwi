@@ -11,7 +11,7 @@ function inkwi:main(){
        let $params :=    
        map{
         'header' : '',
-        'content' : funct:tpl2( 'login', map{ 'параметр2' : 'ДРУГОЕ ЗНАЧЕНИЕ'} ),
+        'content' : funct:tpl2( 'login', map{ 'параметр2' : 'ДРУГОЕ ЗНАЧЕНИЕ' } ),
         'footer' : funct:tpl2( 'footer', map{} )
       }
     return
