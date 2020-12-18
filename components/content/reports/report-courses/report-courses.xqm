@@ -43,21 +43,25 @@ declare function report:table(){
       <th >{ count( $количество ) }</th>
   
   return
-    <table class="table table-bordered">
-      <tr align="center">
-        <th>Категория</th>
-        <th>Всего</th>
-        {
-          for $i in $кафедры
-          return
-            <th>{ $i }</th>
-        }
-      </tr>
-      { $строки }
-      <tr align="center">
-        <th align="left" >Итого:</th>
-        <th>{ count( $курсы ) }</th>
-        { $всегоПоКафедрам }
-      </tr>
+    <table class="table table-bordered table-striped shadow ">
+      <thead>
+        <tr align="center">
+          <th>Категория</th>
+          <th>Всего</th>
+          {
+            for $i in $кафедры
+            return
+              <th>{ $i }</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        { $строки }
+        <tr align="center">
+          <th align="left" >Итого:</th>
+          <th>{ count( $курсы ) }</th>
+          { $всегоПоКафедрам }
+        </tr>
+      </tbody>
     </table>
 };
