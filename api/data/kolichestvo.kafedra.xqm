@@ -22,7 +22,10 @@ function data:main(){
        </_>
  return
    <json type = "array">
-       
+       <_ type = "array">
+         <_>Tasks</_>
+         <_ >Структура курсов</_>
+       </_>
        { $курсы }
     
    </json>
