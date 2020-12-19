@@ -1,11 +1,63 @@
 <div class = "row">
+  <style>
+		.preloader-5 {
+			display: block;
+			position: relative;
+			width: 150px;
+			height: 150px;
+			margin: 30px auto;
+			border-radius: 50%;
+			border: 3px solid transparent;
+			border-top-color: #337AB7;
+			animation: preloader-5-spin 2s linear infinite;
+		}
+		.preloader-5:before {
+			content: "";
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			right: 5px;
+			bottom: 5px;
+			border-radius: 50%;
+			border: 3px solid transparent;
+			border-top-color: #BFE2FF;
+			animation: preloader-5-spin 3s linear infinite;
+		}
+		.preloader-5:after {
+			content: "";
+			position: absolute;
+			top: 15px;
+			left: 15px;
+			right: 15px;
+			bottom: 15px;
+			border-radius: 50%;
+			border: 3px solid transparent;
+			border-top-color: #337AB7;
+			animation: preloader-5-spin 1.5s linear infinite;
+		}
+		@keyframes preloader-5-spin {
+			0%   {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	</style>
   
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"/>
   <script type="text/javascript" src = "/static/unoi/js/unoi.monitoring.count.kafedr.js"/>
   
   <div class = 'h2 col-10 offset-md-1 text-center'>Сводные данные по количеству запланированных курсов</div>
   
-  <div id="piechart" style="width: 900px; height: 500px;"></div>
+  <div >
+    <div id="piechart" style="width: 900px; height: 500px;">
+      <p>идет загрузка диаграммы ...</p>
+      <div class="preloader-5"></div>
+    </div>
+  </div>
+  
   
   <div class = 'col-10 offset-md-1'>{{отчет}}</div>
+  
 </div>
