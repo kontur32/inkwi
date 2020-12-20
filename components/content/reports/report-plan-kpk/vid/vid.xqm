@@ -4,25 +4,40 @@ import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateT
 
 declare function vid:main( $params ){
   let $отчет:= 
-      <div>
-        <h2>{ upper-case( $params?вид ) }</h2>
-        <div>{
-           for $k in $params?rows
-           let $уровень := $k/cell[ @label = 'Уровень' ]/text()
-           group by $уровень
-           let $названиеУровня :=
-             let $l :=
-               $params?уровни/row[ cell[ @label = 'Сокращенное название' ] = $уровень ]
-               /cell[ @label = 'Название']/text()
-             return
-               if( $l != '' )then( $l )else( $уровень )
+      <div id="accordion">
+        
+          <h3>{ $params?вид }</h3>
+          
+          <div>{
+             for $k in $params?rows
+             let $уровень := $k/cell[ @label = 'Уровень' ]/text()
+             group by $уровень
+             let $названиеУровня :=
+               let $l :=
+                 $params?уровни/row[ cell[ @label = 'Сокращенное название' ] = $уровень ]
+                 /cell[ @label = 'Название']/text()
+               return
+                 if( $l != '' )then( $l )else( $уровень )
+            count $c
+            let $v := web:encode-url( $params?вид )    
+            return
+                <div class="card">
+                  <div class="card-header text-left" id="{ 'headingOne' || $params?номер || $c }">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="{ '#collapseOne' || $params?номер || $c }" aria-expanded="true" aria-controls="collapseOne">
+                      <h5 class = "text-left">{ $названиеУровня }</h5>
+                    </button>
+                  </div>
+                  
+                  <div id="{ 'collapseOne' || $params?номер || $c }" class="collapse" aria-labelledby="{ 'headingOne' || $params?номер || $c }" data-parent="#accordion">
+                    <div class="card-body">
+                      { vid:table( $k ) }
+                    </div>
+                  </div>
+                  
+                </div>
               
-          return
-            <div>
-              <h3>{ $названиеУровня }</h3>
-              <div>{ vid:table( $k ) }</div>
-            </div>
-        }</div>
+          }</div>
+        
       </div>
   return
     map{ 'отчет' : $отчет }
