@@ -43,10 +43,26 @@ function login:main( $login as xs:string, $password as xs:string, $redirect ){
       /file/table[ @label = 'Сотрудники' ]
       /row[ cell[ @label = 'Логин'] = $login ]
       /cell[ @label = 'Фото' ]/text()
-      
+    
+    let $школы :=
+      getData:getFile(
+        '/УНОИ/Кафедры/Сводная.xlsx',
+        '.',
+        $config:param( 'fileStore.Saas.main' ),
+        $accessToken
+      )
+      /file/table[ @label = 'Школы' ]
+      /row 
+    
     return
       if( namespace-uri( $user ) != 'http://www.w3.org/2005/xqt-errors' )
       then(
+        
+        let $школа :=
+          $школы[ cell[ @label = 'Логин' ]/text() = $login ]
+        return
+         session:set( "папка", $школа/cell[ @label = 'Папка' ]/text() ),
+          
         session:set( 'accessToken', $accessToken ),
         session:set( "login", $login ),
         session:set( "displayName", $displayName ),

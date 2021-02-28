@@ -8,11 +8,15 @@ declare
   %output:method( "xhtml" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
 function inkwi:main( $отчет as xs:string ){
-    
+    let $содержание :=
+      map{
+        'отчет' : $отчет,
+        'query-params' : inkwi:query-params()
+      }
     let $params :=    
        map{
         'header' : funct:tpl2( 'school/header', map{} ),
-        'content' : funct:tpl2( 'content/reports/report-plan-kpk', map{} ),
+        'content' : funct:tpl2( 'school/reports', $содержание ),
         'footer' : funct:tpl2( 'footer', map{} )
         
        }
