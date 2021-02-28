@@ -10,6 +10,7 @@
             <div class="form-group">
                 <label for="">Пароль</label>
                 <input type="password" name="password" id="" class="form-control" placeholder="password" aria-describedby="helpId"/>
+                <input type="text" name="redirect" value = "{{redirect}}" style = "display: none"/>
                 <small id="helpId" class="text-muted">Введите пароль</small>
             </div>
             <button class="btn btn-info" form="login" type="submit" formmethod="GET" formaction="/unoi/api/v01/login">Войти</button>

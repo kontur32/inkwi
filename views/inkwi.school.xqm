@@ -14,12 +14,22 @@ function inkwi:main(){
       { funct:tpl2( 'content/reports/school/teachers', map{} ) }</div>
     </div>
   
-  let $params :=    
-     map{
-      'header' : funct:tpl2( 'header/school', map{} ),
-      'content' : $содержание,
-      'footer' : funct:tpl2( 'footer', map{} )
-    }
+  let $params := 
+    if( session:get( 'login' ) )
+    then(
+       map{
+        'header' : funct:tpl2( 'header/school', map{} ),
+        'content' : $содержание,
+        'footer' : funct:tpl2( 'footer', map{} )
+      }
+    )
+    else(  
+       map{
+        'header' : '',
+        'content' : funct:tpl2( 'login', map{ 'redirect' : '/unoi/sch' } ),
+        'footer' : funct:tpl2( 'footer', map{} )
+      }
+    )
   return
     funct:tpl2( 'main', $params )
 };

@@ -6,8 +6,9 @@ declare
   %rest:GET
   %rest:query-param( "login", "{ $login }" )
   %rest:query-param( "password", "{ $password }" )
+  %rest:query-param( "redirect", "{ $redirect }", "/unoi/u" )
   %rest:path( "/unoi/api/v01/login" )
-function login:main( $login as xs:string, $password as xs:string ){
+function login:main( $login as xs:string, $password as xs:string, $redirect ){
   
   if( $login = "unoi" )
   then(
@@ -44,7 +45,7 @@ function login:main( $login as xs:string, $password as xs:string ){
         session:set( "login", $login ),
         session:set( "displayName", $displayName ),
         session:set( 'userAvatarURL', $avatarURL),
-        web:redirect( "/unoi/u" ) 
+        web:redirect( $redirect ) 
       )
       else( web:redirect( "/unoi" ) )
     )
