@@ -11,14 +11,14 @@ function inkwi:main(){
   let $содержание :=
     <div class = "row">
       <div class = "col-md-12 bg-white">личный кабинет школы<br/>
-      { funct:tpl2( 'content/reports/school/teachers', map{} ) }</div>
+      { funct:tpl2( 'school/reports/teachers', map{} ) }</div>
     </div>
   
   let $params := 
     if( session:get( 'login' ) )
     then(
        map{
-        'header' : funct:tpl2( 'header/school', map{} ),
+        'header' : funct:tpl2( 'school/header', map{} ),
         'content' : $содержание,
         'footer' : funct:tpl2( 'footer', map{} )
       }
