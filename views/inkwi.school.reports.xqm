@@ -11,7 +11,7 @@ function inkwi:main( $отчет as xs:string ){
     
     let $params :=    
        map{
-        'header' : funct:tpl2( 'header/school', map{} ),
+        'header' : funct:tpl2( 'school/header', map{} ),
         'content' : funct:tpl2( 'content/reports/report-plan-kpk', map{} ),
         'footer' : funct:tpl2( 'footer', map{} )
         
