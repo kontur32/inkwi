@@ -4,7 +4,7 @@ import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateT
 
 declare function vid:main( $params ){
   let $отчет:= 
-      <div id="accordion">
+      <div id="accordion" class = 'shadow mb-4'>
         
           <h3>{ $params?вид }</h3>
           
