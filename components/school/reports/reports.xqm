@@ -7,6 +7,9 @@ declare function reports:main( $params ){
     case "учителя-кпк"
       return
         $params?_tpl( 'school/reports/teachers', map{} )
+    case "заявка"
+      return
+        $params?_tpl( 'school/reports/order-kpk', $params )
     case "учителя-категории"
       return
         $params?_tpl( 'school/reports/teachers-category', map{} )

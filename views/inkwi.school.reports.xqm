@@ -4,6 +4,7 @@ import module namespace funct="funct" at "../functions/functions.xqm";
 
 declare 
   %rest:GET
+  %rest:POST
   %rest:path( "/unoi/sch/отчеты/{ $отчет }" )
   %output:method( "xhtml" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )

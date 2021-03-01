@@ -26,7 +26,7 @@ let $строки :=
       <td>{ $i/cell[ @label = "Должность" ]/text() }</td>
       <td class = "text-center">{ $датаПК }</td>
       <td class = "text-center">{ $датаПК + xs:dayTimeDuration("P1095D") }</td>
-      <td class = "text-center"><input type="checkbox" name="учитель" value="{ $фио }" checked = "yes"/></td>
+      <td class = "text-center"><input form = "teacher" type="checkbox" name="учитель" value="{ $фио }" checked = "yes"/></td>
     </tr>
 
  return
