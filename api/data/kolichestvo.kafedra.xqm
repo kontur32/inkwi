@@ -1,23 +1,22 @@
 module namespace data = "/unoi/api/v01/data/reports/kurses/kolichestvo.kafedra";
 
+import module namespace funct="funct" at "../../functions/functions.xqm"; 
+
 declare 
   %rest:GET
   %output:method('json')
   %rest:path( "/unoi/api/v01/data/reports/kurses/kolichestvo.kafedra" )
 function data:main(){
    let $data := 
-    fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/c48c07c3-a998-47bf-8e33-4d6be40bf4a7' )
-  
-  let $виды := $data//table[ @label = 'ДПО' ]
-  let $уровни := $data//table[ @label = 'Уровни' ]
-  let $кафедры := $data//table[ @label = 'Кафедры' ]
+    funct:tpl2( 'api/list-courses', map{} )/data
+
   let $курсы :=
-    for $i in $кафедры/row
-    let $path := $i/cell[ @label = 'График КПК' ]/text()
-    let $КПК := fetch:xml( $path )//row
+    for $i in $data/спискиКурсов/file
+    let $КПК := $i//row
+    let $названиеКафедры := $КПК[ 1 ]/cell[ @label = 'Кафедра' ]/text()
     return
         <_ type = "array">
-         <_>{ $i/cell[ @label = 'Название кафедры' ]/text() }</_>
+         <_>{ $названиеКафедры }</_>
          <_ type = 'number'>{ count( $КПК ) }</_>
        </_>
  return
@@ -27,6 +26,5 @@ function data:main(){
          <_ >Структура курсов</_>
        </_>
        { $курсы }
-    
    </json>
 };

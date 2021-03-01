@@ -3,7 +3,7 @@ module namespace report = 'school/reports/order-kpk';
 declare function report:main( $params ){
     map{
       'учителя' : report:учителя( $params ),
-      'курсы' : report:курсы( $params )
+      'курсы' : report:списокКурсов( $params )
     }
 };
 
@@ -26,18 +26,11 @@ function report:учителя( $params ){
 
 declare
   %private
-function report:курсы( $params ){
-  let $data := 
-     $params?_data?getFile( '/УНОИ/Кафедры/Сводная.xlsx',  '.' )
-  
-  let $кафедры := $data//table[ @label = 'Кафедры' ]
-  
-  for $i in $кафедры/row  
-  let $названиеКафедры :=
-    $i/cell[ @label = 'Название кафедры' ]/text()
+function report:списокКурсов( $params ){
   let $КПК :=
-    $params?_data?getFile( '/УНОИ/Кафедры/' || $названиеКафедры || '/Курсовые мероприятия кафедры.xlsx',  '.' )
-    //row[ cell[ @label = 'Объем' ]/text() = ( '36', '72' ) ]
+    $params?_tpl( 'api/list-courses', $params )
+    /data/спискиКурсов/file/table
+    /row[ cell[ @label = 'Объем' ]/text() = ( '36', '72' ) ]
   
   for $j in $КПК
   order by $j/cell[ @label = 'Объем' ]/text()

@@ -1,22 +1,13 @@
 module namespace report = 'content/reports/report-courses';
 
 declare function report:main( $params ){
-    map{ 'отчет' : report:table() }
+    map{ 'отчет' : report:table( $params ) }
 };
 
-declare function report:table(){
-  let $data := 
-    fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/c48c07c3-a998-47bf-8e33-4d6be40bf4a7' )
+declare function report:table( $params ){
+  let $d:= $params?_tpl( 'api/list-courses', $params )
   
-  let $виды := $data//table[ @label = 'ДПО' ]
-  let $уровни := $data//table[ @label = 'Уровни' ]
-  let $кафедры := $data//table[ @label = 'Кафедры' ]
-  let $курсы :=
-    for $i in $кафедры/row
-    let $path := $i/cell[ @label = 'График КПК' ]/text()
-    let $КПК := fetch:xml( $path )//row
-    return
-      $КПК update insert node <cell label = 'Кафедра'>{ $i/cell[ @label = 'Название кафедры' ]/text() }</cell> into .
+  let $курсы := $d//спискиКурсов//row
 
   let $кафедры := distinct-values( $курсы/cell[ @label = 'Кафедра' ]/text() )
   let $уровни := distinct-values( $курсы/cell[ @label = 'Уровень' ]/text() )
