@@ -3,7 +3,7 @@ module namespace report = 'school/reports/order-kpk';
 declare function report:main( $params ){
     map{
       'учителя' : report:учителя( $params ),
-      'курсы' : report:курсы()
+      'курсы' : report:курсы( $params )
     }
 };
 
@@ -26,17 +26,19 @@ function report:учителя( $params ){
 
 declare
   %private
-function report:курсы(){
+function report:курсы( $params ){
+
   let $data := 
-    fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/c48c07c3-a998-47bf-8e33-4d6be40bf4a7' )
-  
-  let $виды := $data//table[ @label = 'ДПО' ]
-  let $уровни := $data//table[ @label = 'Уровни' ]
+     $params?_data?getFile( '/УНОИ/Кафедры/Сводная.xlsx',  '.' )
   let $кафедры := $data//table[ @label = 'Кафедры' ]
   
-  for $i in $кафедры/row
-  let $path := $i/cell[ @label = 'График КПК' ]/text()
-  let $КПК := fetch:xml( $path )//row[ cell[ @label = 'Объем' ]/text() = ( '72', '36' ) ]
+  for $i in $кафедры/row  
+  let $названиеКафедры :=
+    $i/cell[ @label = 'Название кафедры' ]/text()
+  let $КПК :=
+    $params?_data?getFile( '/УНОИ/Кафедры/' || $названиеКафедры || '/Курсовые мероприятия кафедры.xlsx',  '.' )
+    //row[ cell[ @label = 'Объем' ]/text() = ( '36', '72' ) ]
+  
   for $j in $КПК
   order by $j/cell[ @label = 'Объем' ]/text()
   return
