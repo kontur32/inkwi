@@ -46,13 +46,11 @@ function login:main( $login as xs:string, $password as xs:string, $redirect ){
     
     let $школы :=
       getData:getFile(
-        '/УНОИ/Кафедры/Сводная.xlsx',
+        '/Школы/Школы.xlsx',
         '.',
         $config:param( 'fileStore.Saas.main' ),
         $accessToken
-      )
-      /file/table[ @label = 'Школы' ]
-      /row 
+      )/file/table[ @label="Школы" ]/row
     
     return
       if( namespace-uri( $user ) != 'http://www.w3.org/2005/xqt-errors' )

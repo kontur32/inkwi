@@ -27,9 +27,9 @@ function report:учителя( $params ){
 declare
   %private
 function report:курсы( $params ){
-
   let $data := 
      $params?_data?getFile( '/УНОИ/Кафедры/Сводная.xlsx',  '.' )
+  
   let $кафедры := $data//table[ @label = 'Кафедры' ]
   
   for $i in $кафедры/row  

@@ -8,7 +8,7 @@ declare function report:main( $params ){
 
 declare function report:table( $params ){
  let $учителя :=
-    $params?_data?getFile( '/Школы/Иваново/26_школа/Кадры.xlsx',  '.' )
+    $params?_data?getFile( '/Школы/Иваново/' || session:get( 'папка' ) || '/Кадры.xlsx',  '.' )
  
 let $строки := 
   for $i in $учителя/file/table[ 1 ]/row
