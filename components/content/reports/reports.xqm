@@ -13,6 +13,9 @@ declare function reports:main( $params ){
     case "отчет-курсы"
       return
         $params?_tpl( 'content/reports/report-courses', map{} )
+    case "отчет-календарь"
+      return
+        $params?_tpl( 'content/reports/report-calendar', map{} )
     case "календарный-план"
       return
         $params?_tpl( 'content/reports/report-plan-kpk', map{} )
