@@ -9,22 +9,8 @@ declare function list-courses:main( $params as map(*) ){
 };
 
 declare function list-courses:курсы( $params ){
-  
-  let $текущаяДата := 
-     substring-before(
-       xs:string( current-date() ), '+'
-     )
-   
-  let $начальнаяДата := 
-     if( request:parameter( 'начальнаяДата' ) )
-     then( request:parameter( 'начальнаяДата' ) )
-     else( $текущаяДата )
-   
-  let $конечнаяДата := 
-     if( request:parameter( 'конечнаяДата' ) )
-     then( request:parameter( 'конечнаяДата' ) )
-     else( $текущаяДата )
-     
+  let $начальнаяДата := $params?начальнаяДата
+  let $конечнаяДата :=  $params?конечнаяДата
   let $сотрудники := ( "Иванова Е.В.", "Кольчугина Н.В.", "Кулаков К.В." )
   
   let $календари :=

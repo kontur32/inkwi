@@ -11,15 +11,25 @@ declare function report:main( $params ){
   let $начальнаяДата := 
      if( request:parameter( 'начальнаяДата' ) )
      then( request:parameter( 'начальнаяДата' ) )
-     else( $текущаяДата )
+     else( '2021-03-01' )
    
   let $конечнаяДата := 
      if( request:parameter( 'конечнаяДата' ) )
      then( request:parameter( 'конечнаяДата' ) )
-     else( $текущаяДата )
+     else( '2021-03-20' )
+  let $p := 
+    map:merge(
+      (
+        $params,
+        map{
+          'начальнаяДата' : $начальнаяДата,
+          'конечнаяДата' : $конечнаяДата
+        }
+      )
+    )
   return
       map{
-        'отчет' : report:tables( $params, $начальнаяДата, $конечнаяДата ),
+        'отчет' : report:tables( $p, $начальнаяДата, $конечнаяДата ),
         'начальнаяДата' : $начальнаяДата,
         'конечнаяДата' : $конечнаяДата
       }
