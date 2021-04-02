@@ -15,28 +15,19 @@ declare function report:table( $params ){
   let $строки :=  
     for $i in $уровни
     let $r := $курсы[ cell[ @label = 'Уровень']/text() = $i ]
-    let $всего := count( $r )
-    order by $всего descending
-    
-        
+    order by count( $r ) descending
     return
       <tr align="center">
         <td align="left">{ $i }</td>
         <td>
-          { $всего }<br/>
-          { count( $r[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
-          { sum( $r/cell[ @label = 'Завершили' ]/text() ) }<br/>
-          { sum( for-each( $r, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+          { report:данные( $r ) }
         </td>
       {
         for $j in  $кафедры
         let $rr := $r[ cell[ @label = 'Кафедра']/text() = $j ]
         return
            <td>
-             { count( $rr ) }<br/>
-             { count( $rr[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
-             { sum( $rr/cell[ @label = 'Завершили' ]/text() ) }<br/>
-             { sum( for-each( $rr, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+             { report:данные( $rr ) }
            </td>
       }</tr>
   let $всегоПоКафедрам := 
@@ -44,18 +35,12 @@ declare function report:table( $params ){
     let $количество := $курсы[ cell[ @label = 'Кафедра']/text() = $i ]
     return
       <th>
-        { count( $количество ) }<br/>
-        { count( $количество[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
-        { sum( $количество/cell[ @label = 'Завершили' ]/text() ) }<br/>
-        { sum( for-each( $количество, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+        { report:данные( $количество ) }
       </th>
   
   let $всего :=
     <th>
-      { count( $курсы ) }<br/>
-      { count( $курсы[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
-      { sum( $курсы/cell[ @label = 'Завершили' ]/text() ) }<br/>
-      { sum( for-each( $курсы, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+      { report:данные( $курсы ) }
     </th>
   
   return
@@ -85,4 +70,25 @@ declare function report:table( $params ){
         { $строки }
       </tbody>
     </table>
+};
+
+declare function report:данные( $курсы ){
+  let $стоимостьПоКурсам :=
+    sum(
+      for-each(
+        $курсы,
+        function( $var ){ 
+          $var/cell[ @label = 'Завершили' ]/text() * 
+          $var/cell[ @label = 'Стоимость обучения' ]/text() 
+        }
+      )
+    )
+  return
+    <span>
+      { count( $курсы ) }<br/>
+      { count( $курсы[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
+      { sum( $курсы/cell[ @label = 'Завершили' ]/text() ) }<br/>
+      { replace( xs:string( $стоимостьПоКурсам ), '(\d{3})$', '.$1'  ) }
+    </span>
+  
 };
