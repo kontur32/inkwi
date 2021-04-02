@@ -10,6 +10,9 @@ declare function reports:main( $params ){
         fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/7d9b8696-f1be-4abb-9952-2b1947f8193c' )//div[ @id = 'content' ]
       :)
         
+    case "отчет-статистика-занятость"
+      return
+        $params?_tpl( 'content/reports/report-statistic1', map{} )
     case "отчет-курсы"
       return
         $params?_tpl( 'content/reports/report-courses', map{} )
