@@ -17,21 +17,46 @@ declare function report:table( $params ){
     let $r := $курсы[ cell[ @label = 'Уровень']/text() = $i ]
     let $всего := count( $r )
     order by $всего descending
+    
+        
     return
       <tr align="center">
         <td align="left">{ $i }</td>
-        <td>{ $всего }</td>
+        <td>
+          { $всего }<br/>
+          { count( $r[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
+          { sum( $r/cell[ @label = 'Завершили' ]/text() ) }<br/>
+          { sum( for-each( $r, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+        </td>
       {
         for $j in  $кафедры
         let $rr := $r[ cell[ @label = 'Кафедра']/text() = $j ]
         return
-           <td>{ count( $rr ) }</td>
+           <td>
+             { count( $rr ) }<br/>
+             { count( $rr[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
+             { sum( $rr/cell[ @label = 'Завершили' ]/text() ) }<br/>
+             { sum( for-each( $rr, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+           </td>
       }</tr>
   let $всегоПоКафедрам := 
     for $i in  $кафедры
     let $количество := $курсы[ cell[ @label = 'Кафедра']/text() = $i ]
     return
-      <th >{ count( $количество ) }</th>
+      <th>
+        { count( $количество ) }<br/>
+        { count( $количество[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
+        { sum( $количество/cell[ @label = 'Завершили' ]/text() ) }<br/>
+        { sum( for-each( $количество, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+      </th>
+  
+  let $всего :=
+    <th>
+      { count( $курсы ) }<br/>
+      { count( $курсы[ cell[ @label = 'Завершили' ]/text() ] ) }<br/>
+      { sum( $курсы/cell[ @label = 'Завершили' ]/text() ) }<br/>
+      { sum( for-each( $курсы, function( $var ){ $var/cell[ @label = 'Завершили' ]/text() * $var/cell[ @label = 'Стоимость обучения' ]/text() } ) ) }
+    </th>
   
   return
     <table class="table table-bordered table-striped shadow ">
@@ -47,12 +72,17 @@ declare function report:table( $params ){
         </tr>
       </thead>
       <tbody>
-        { $строки }
         <tr align="center">
-          <th align="left" >Итого:</th>
-          <th>{ count( $курсы ) }</th>
+          <th class="text-left" >
+            Итого план:<br/>
+            Проведено курсов<br/>
+            Студентов<br/>
+            Выручка
+          </th>
+          { $всего }
           { $всегоПоКафедрам }
         </tr>
+        { $строки }
       </tbody>
     </table>
 };
