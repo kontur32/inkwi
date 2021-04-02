@@ -67,11 +67,17 @@ let $результат  :=
     else( 'Без категории' )
   
   group by $категория
+  let $длительность :=
+    for $j in $i
+    let $a := number( replace( $j/cell[  @label = "Длительность" ]/text(), '\.30', '.50') )
+    where $a
+    return
+      $a
   return
     <tr>
       <td>{ $категория }</td>
       <td class = "text-center">{ count( $i ) }</td>
-      <td class = "text-center">{ sum( $i/cell[ @label = "Длительность" ]/text() ) }</td>
+      <td class = "text-center">{ sum( $длительность ) }</td>
     </tr>
 
 return
@@ -83,7 +89,7 @@ return
       <tr>
           <td>Всего</td>
           <th class = "text-center">{ count( $строки ) }</th>
-          <th class = "text-center">{ sum( $строки/cell[ @label = "Длительность" ]/text() ) }</th>
+          <th class = "text-center">{ sum( $результат/td[ 3 ]/text() ) }</th>
       </tr>
       <tr>
         <td colspan = "3"></td>
