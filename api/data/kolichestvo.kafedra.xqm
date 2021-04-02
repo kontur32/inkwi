@@ -13,17 +13,31 @@ function data:main(){
   let $курсы :=
     for $i in $data/спискиКурсов/file
     let $КПК := $i//row
+    
+    let $стоимостьПоКурсам :=
+      sum(
+        for-each(
+          $КПК,
+          function( $var ){ 
+            $var/cell[ @label = 'Завершили' ]/text() * 
+            $var/cell[ @label = 'Стоимость обучения' ]/text() 
+          }
+        )
+      )
+    
     let $названиеКафедры := $КПК[ 1 ]/cell[ @label = 'Кафедра' ]/text()
+    
     return
         <_ type = "array">
          <_>{ $названиеКафедры }</_>
-         <_ type = 'number'>{ count( $КПК ) }</_>
+         <_ type = 'number'>{ $стоимостьПоКурсам }</_>
        </_>
+ 
  return
    <json type = "array">
        <_ type = "array">
          <_>Tasks</_>
-         <_ >Структура курсов</_>
+         <_>Структура курсов</_>
        </_>
        { $курсы }
    </json>
