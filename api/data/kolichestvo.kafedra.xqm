@@ -5,8 +5,8 @@ import module namespace funct="funct" at "../../functions/functions.xqm";
 declare 
   %rest:GET
   %output:method('json')
-  %rest:path( "/unoi/api/v01/data/reports/kurses/kolichestvo.kafedra" )
-function data:main(){
+  %rest:path( "/unoi/api/v01/data/reports/kurses/{ $mode }.kafedra" )
+function data:main( $mode ){
    let $data := 
     funct:tpl2( 'api/list-courses', map{} )/data
 
@@ -14,23 +14,27 @@ function data:main(){
     for $i in $data/спискиКурсов/file
     let $КПК := $i//row
     
-    let $стоимостьПоКурсам :=
-      sum(
-        for-each(
-          $КПК,
-          function( $var ){ 
-            $var/cell[ @label = 'Завершили' ]/text() * 
-            $var/cell[ @label = 'Стоимость обучения' ]/text() 
-          }
+    let $результат :=
+      if( $mode = 'revenue' )
+      then(
+        sum(
+          for-each(
+            $КПК,
+            function( $var ){ 
+              $var/cell[ @label = 'Завершили' ]/text() * 
+              $var/cell[ @label = 'Стоимость обучения' ]/text() 
+            }
+          )
         )
       )
+      else( count( $КПК ) )
     
     let $названиеКафедры := $КПК[ 1 ]/cell[ @label = 'Кафедра' ]/text()
     
     return
         <_ type = "array">
          <_>{ $названиеКафедры }</_>
-         <_ type = 'number'>{ $стоимостьПоКурсам }</_>
+         <_ type = 'number'>{ $результат }</_>
        </_>
  
  return
