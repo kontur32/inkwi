@@ -18,7 +18,7 @@ declare function list-courses:курсы( $params ){
     let $путь := 
       replace(
         '/УНОИ/Кафедры/Управление образованием/Сотрудники/%1/Календарь.xlsx',
-        '%1', $i
+        '%1',  substring-before( $i, ' ' )
       )  
     let $file := $params?_data?getFile( $путь,  '.' )
     let $c := 
