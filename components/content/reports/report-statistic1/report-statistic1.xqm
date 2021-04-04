@@ -69,7 +69,7 @@ let $результат  :=
   group by $категория
   let $длительность :=
     for $j in $i
-    let $a := number( replace( $j/cell[  @label = "Длительность" ]/text(), '\.30', '.50') )
+    let $a := replace( xs:string( $j/cell[  @label = "Длительность" ]/text() ), '30', '50' )
     where $a
     return
       $a
@@ -77,7 +77,7 @@ let $результат  :=
     <tr>
       <td>{ $категория }</td>
       <td class = "text-center">{ count( $i ) }</td>
-      <td class = "text-center">{ sum( $длительность ) }</td>
+      <td class = "text-center">{ sum( $i/cell[  @label = "Длительность" ]/text() )  }</td>
     </tr>
 
 return
