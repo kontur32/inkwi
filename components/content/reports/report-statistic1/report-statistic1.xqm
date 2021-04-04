@@ -32,8 +32,8 @@ declare function report:tables( $params, $начальнаяДата, $коне�
   let $путь := 
     replace(
       '/УНОИ/Кафедры/Управление образованием/Сотрудники/%1/Календарь.xlsx',
-      '%1', $i
-    )
+      '%1',  substring-before( $i, ' ' )
+    )  
   let $file := $params?_data?getFile( $путь, '.' )
   return
     report:table( $file, $i, $начальнаяДата, $конечнаяДата )/tr
@@ -67,17 +67,21 @@ let $результат  :=
     else( 'Без категории' )
   
   group by $категория
+  
   let $длительность :=
     for $j in $i
-    let $a := replace( xs:string( $j/cell[  @label = "Длительность" ]/text() ), '30', '50' )
+    let $a:= 
+      try{ $j/cell[  @label = "Длительность" ]/number() * 24 }
+      catch*{ 0 }
     where $a
     return
       $a
+  
   return
     <tr>
       <td>{ $категория }</td>
       <td class = "text-center">{ count( $i ) }</td>
-      <td class = "text-center">{ sum( $i/cell[  @label = "Длительность" ]/text() )  }</td>
+      <td class = "text-center">{ round( sum( $длительность ) )  }</td>
     </tr>
 
 return
