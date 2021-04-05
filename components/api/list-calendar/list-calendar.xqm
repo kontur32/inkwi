@@ -1,5 +1,6 @@
 module namespace list-courses = "api/list-calendar";
 
+import module namespace functx = "http://www.functx.com";
 import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateTime.xqm';
 
 declare function list-courses:main( $params as map(*) ){
@@ -11,14 +12,20 @@ declare function list-courses:main( $params as map(*) ){
 declare function list-courses:курсы( $params ){
   let $начальнаяДата := $params?начальнаяДата
   let $конечнаяДата :=  $params?конечнаяДата
-  let $сотрудники := ( "Иванова Е.В.", "Кольчугина Н.В.", "Кулаков К.В." )
-  
+  let $кафедры :=
+    (
+      [ 'Управление образованием', ( "Иванова Е.В.", "Кольчугина Н.В.", "Кулаков К.В." ) ]
+      ,
+      [ 'Естественно-научных дисциплин', ( "Никольская А.В.", "Омельченко И.Н.", "Тихонова Н.М.", "Туртин Д.В." ) ]
+    )
+  let $все :=
+  for $кафедра in $кафедры
   let $календари :=
-    for $i in $сотрудники
+    for $i in $кафедра?2
     let $путь := 
-      replace(
-        '/УНОИ/Кафедры/Управление образованием/Сотрудники/%1/Календарь.xlsx',
-        '%1',  substring-before( $i, ' ' )
+      functx:replace-multi(
+        '/УНОИ/Кафедры/%1/Сотрудники/%2/Календарь.xlsx',
+        ( '%1', '%2' ),  ( $кафедра?1, substring-before( $i, ' ' ) )
       )  
     let $file := $params?_data?getFile( $путь,  '.' )
     let $c := 
@@ -33,7 +40,8 @@ declare function list-courses:курсы( $params ){
     return
       $c
   return
-    <data>
+    
       <мероприятия>{ $календари }</мероприятия>
-    </data>  
+return
+  <data>{ $все }</data>    
 };
