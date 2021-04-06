@@ -8,7 +8,7 @@ declare function list-courses:main( $params as map(*) ){
 };
 
 declare function list-courses:курсы( $params ){
-   let $data := 
+  let $data := 
      $params?_data?getFile( '/УНОИ/Кафедры/Сводная.xlsx',  '.' )
   
   let $кафедры := $data//table[ @label = 'Кафедры' ]
