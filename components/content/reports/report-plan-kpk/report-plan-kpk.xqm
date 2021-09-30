@@ -3,8 +3,9 @@ module namespace report = 'content/reports/report-plan-kpk';
 import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateTime.xqm';
 
 declare function report:main( $params ){
-   let $d := $params?_tpl( 'api/list-courses', $params )/data
    
+   let $d :=
+     fetch:xml('http://iro37.ru:9984/unoi/api/v01/lists/courses')/data
    let $data := $d//сводная
    let $курсы := $d//спискиКурсов/file//row
      
