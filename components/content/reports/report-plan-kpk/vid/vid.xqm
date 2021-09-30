@@ -4,7 +4,7 @@ import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateT
 
 declare function vid:main( $params ){
   let $отчет:= 
-      <div id="accordion" class = 'shadow mb-4'>
+      <div id="accordion" class = 'shadow mb-4' вид = "{ $params?вид }">
         
           <h3>{ $params?вид }</h3>
           
@@ -21,7 +21,7 @@ declare function vid:main( $params ){
             count $c
             let $v := web:encode-url( $params?вид )    
             return
-                <div class="card">
+                <div class="card" уровень = "{ $уровень }">
                   <div class="card-header text-left" id="{ 'headingOne' || $params?номер || $c }">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="{ '#collapseOne' || $params?номер || $c }" aria-expanded="true" aria-controls="collapseOne">
                       <h5 class = "text-left">{ $названиеУровня }</h5>
@@ -30,7 +30,7 @@ declare function vid:main( $params ){
                   
                   <div id="{ 'collapseOne' || $params?номер || $c }" class="collapse" aria-labelledby="{ 'headingOne' || $params?номер || $c }" data-parent="#accordion">
                     <div class="card-body">
-                      { vid:table( $k ) }
+                      { vid:table( $k, $params?вид, $названиеУровня ) }
                     </div>
                   </div>
                   
@@ -59,8 +59,8 @@ declare function vid:date( $var ){
     ) 
 };
 
-declare function vid:table( $i ){
-  <table class = "table table-bordered" width="100%">
+declare function vid:table( $i, $вид, $уровень){
+  <table class = "table table-bordered" вид = "{ $вид }" уровень = "{ $уровень }" width="100%">
         <thead>
           <tr class = 'text-center'>
             <th class = 'align-middle' width="20%">Категория слушателей</th>
@@ -74,9 +74,16 @@ declare function vid:table( $i ){
         <tbody>
           {
           for $j in $i
+          let $id :=
+            if( $j/cell[ @label = 'Курс в Мудл']/text() )
+            then(
+              <a class = "btn btn-success" href = "{ $j/cell[ @label = 'Курс в Мудл']/text() }">Посмотреть курс</a>
+            )
+            else()
+            
           return
             <tr>
-              <td>{ $j/cell[ @label = 'Целевая категория']/text() }</td>
+              <td>{ $j/cell[ @label = 'Целевая категория']/text() }{ $id }</td>
               <td>
                 <b><i>{ $j/cell[ @label = 'Название ДПП']/text() }</i></b><br/>
                 {
