@@ -1,18 +1,23 @@
 module namespace list-courses = "api/list-courses";
 
-declare function list-courses:main( $params as map(*) ){
-  map{
-    'списокКурсов' :
-       list-courses:курсы( $params ) 
-  }
-};
+import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateTime.xqm';
 
-declare function list-courses:курсы( $params ){
+declare function list-courses:main( $params as map(*) ){
   let $data := 
      $params?_data?getFile( '/УНОИ/Кафедры/Сводная.xlsx',  '.' )
-  
+  return
+    map{
+      'списокКурсов' :
+        <data>
+          <спискиКурсов>{ list-courses:курсы( $data, $params )  }</спискиКурсов>
+          <сводная>{ $data }</сводная>
+        </data>
+         
+    }
+};
+
+declare function list-courses:курсы( $data, $params ){
   let $кафедры := $data//table[ @label = 'Кафедры' ]
-  
   let $списокКурсов :=
     for $i in $кафедры/row  
     let $названиеКафедры :=
@@ -28,6 +33,10 @@ declare function list-courses:курсы( $params ){
         <table>
           {
             for $j in $курсыКафедры//row
+            where 
+              if( map:contains( $params, '_filter' ) and map:contains( $params, 'courseID' )  )
+              then( $params?_filter( $j, $params?courseID ) )
+              else( true() )
             return
               $j update insert node $кафедра into .
           }
@@ -35,8 +44,5 @@ declare function list-courses:курсы( $params ){
       </file>
   
   return
-    <data>
-      <спискиКурсов>{ $списокКурсов }</спискиКурсов>
-      <сводная>{ $data }</сводная>
-    </data>
+    $списокКурсов
 };
