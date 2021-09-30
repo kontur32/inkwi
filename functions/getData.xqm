@@ -65,11 +65,22 @@ function getData:getFile(  $fileName, $xq, $storeID, $access_token ){
 declare
   %public
 function getData:getFile(  $fileName, $xq, $storeID ){
-   getData:getFile(  $fileName, $xq, $storeID, session:get( 'accessToken' ) )
+  let $accessToken := 
+    if( session:get( 'accessToken' ) )
+    then( session:get( 'accessToken' ) )
+    else(
+      getData:getToken(
+          $config:param( 'authHost' ),
+          $config:param( 'login' ),
+          $config:param( 'password' )
+        )
+    )
+   return
+     getData:getFile(  $fileName, $xq, $storeID, $accessToken )
 };
 
 declare
   %public
 function getData:getFile(  $fileName, $xq ){
-   getData:getFile(  $fileName, $xq, $config:param( 'fileStore.Saas.main' ), session:get( 'accessToken' ) )
+ getData:getFile(  $fileName, $xq, $config:param( 'fileStore.Saas.main' )  )
 };
