@@ -14,35 +14,19 @@ declare
   %rest:path( "/unoi/api/v01/lists/courses/{ $id }/{ $date }" )
   %output:method( "xml" )
 function inkwi:cours( $id, $date as xs:date ){
-  let $filter :=
-    function( $node as element(row), $courseID ){
-      let $programmID := substring-before( $courseID, '/' )
-      let $startDate := substring-after( $courseID, '/' )
-      return
-        $node
-        [ cell [ @label = "Курс в Мудл"]/substring-after( text(), '?id=' ) =  $programmID  ]
-        [ cell [ @label = "Начало КПК"]/dateTime:dateParse( text() ) = xs:date( $startDate ) ]
+  let $funct :=
+    function( $id1, $date1 ){
+      <data>
+        <table>{
+          funct:tpl2( 'api/list-courses', map{ } )
+          /data/спискиКурсов/file/table/row
+          [ cell [ @label = "Курс в Мудл"]/substring-after( text(), '?id=' ) =  $id1  ]
+          [ cell [ @label = "Начало КПК"]/dateTime:dateParse( text() ) = xs:date( $date1 ) ]
+        }</table>
+      </data>
     }
   return
-    <data>
-      <table>{
-        fetch:xml(
-          'http://localhost:9984/unoi/api/v01/lists/courses'
-        )/data/спискиКурсов/file/table/row[ $filter( ., $id || '/' || $date ) ]
-      }</table>
-    </data> 
-};
-
-declare 
-  %rest:GET
-  %rest:path( "/unoi/api/v01/lists/courses/{ $id }" )
-  %output:method( "xml" )
-function inkwi:courses( $id ){
-  <data>{
-    funct:tpl2( 'api/list-courses', map{ } )
-    /data/спискиКурсов/file/table/row
-    [ cell [ @label = "Курс в Мудл"]/substring-after( text(), '?id=' ) = $id ]
-  }</data>
+    inkwi:getResource( $funct( $id, $date ) )
 };
 
 declare 
@@ -50,21 +34,37 @@ declare
   %rest:path( "/unoi/api/v01/lists/courses" )
   %output:method( "xml" )
 function inkwi:allCourses(){
+  inkwi:getResource( funct:tpl2( 'api/list-courses', map{ } ) )
+};
+
+declare function inkwi:getResource( $funct ){
   let $hash :=  xs:string( xs:hexBinary( hash:md5( request:uri() ) ) )
+  let $resPath := config:param( 'cache.dir' ) || $hash
+  let $mod :=
+    function( $resPath1 ){
+      minutes-from-duration( current-dateTime() - file:last-modified( $resPath1 ) )
+    }
+  
   let $cache := 
-      let $res := try{ doc( config:param( 'cache.dir' ) || $hash ) }catch*{}
+    if( file:exists( $resPath ) )
+    then(
+      if( $mod( $resPath ) < 5 )
+      then(
+        try{ doc( $resPath  ) }catch*{}
+      )
+      else(
+        let $res2 := try{ $funct }catch*{}
+        let $w := file:write( config:param( 'cache.dir' ) || $hash, $res2 )
+        return
+           $res2
+      )
+    )
+    else(
+      let $res2 := try{ $funct }catch*{}
+      let $w := file:write( config:param( 'cache.dir' ) || $hash, $res2 )
       return
-        if( not( $res ) )
-        then(
-          let $res2 := 
-            try{
-              funct:tpl2( 'api/list-courses', map{ } )
-            }catch*{}
-          let $w := file:write( config:param( 'cache.dir' ) || $hash, $res2 )
-          return
-             $res2
-        )
-        else( $res )
+         $res2
+    )
   return
     $cache
 };
