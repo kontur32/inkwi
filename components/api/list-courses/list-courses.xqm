@@ -9,11 +9,16 @@ declare function list-courses:main( $params as map(*) ){
     map{
       'списокКурсов' :
         <data>
-          <спискиКурсов>{ list-courses:курсы( $data, $params )  }</спискиКурсов>
+          <спискиКурсов>{ list-courses:курсы2( $params )  }</спискиКурсов>
           <сводная>{ $data }</сводная>
         </data>
          
     }
+};
+
+declare function list-courses:курсы2( $params ){
+  $params?_data?getData( $params?_config( 'host' ) || '/static/unoi/xq/coursesList.xq', map{} )
+  /data/file
 };
 
 declare function list-courses:курсы( $data, $params ){

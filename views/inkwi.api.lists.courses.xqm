@@ -26,7 +26,7 @@ function inkwi:cours( $id, $date as xs:date ){
       </data>
     }
   return
-    inkwi:getResource( $funct( $id, $date ) )
+    $funct( $id, $date )
 };
 
 declare 
@@ -34,7 +34,7 @@ declare
   %rest:path( "/unoi/api/v01/lists/courses" )
   %output:method( "xml" )
 function inkwi:allCourses(){
-  inkwi:getResource( funct:tpl2( 'api/list-courses', map{ } ) )
+  funct:tpl2( 'api/list-courses', map{ } )
 };
 
 declare function inkwi:getResource( $funct ){
