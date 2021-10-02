@@ -30,6 +30,25 @@ declare function getData:getToken( $host, $username, $password )
 declare
   %public
 function
+  getData:getData( $xquery, $params as map(*) ) 
+{
+   let $accessToken := 
+    if( try{ session:get( 'accessToken' ) }catch*{ false() } )
+    then( session:get( 'accessToken' ) )
+    else(
+      getData:getToken(
+          $config:param( 'authHost' ),
+          $config:param( 'login' ),
+          $config:param( 'password' )
+        )
+    )
+   return
+     getData:getData( $xquery, $params, $accessToken )
+};
+
+declare
+  %public
+function
   getData:getData( $xquery, $params as map(*), $access_token ) 
 {
   let $apiURL := 'http://localhost:9984/trac/api/v0.1/u/data'

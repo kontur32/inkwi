@@ -86,7 +86,8 @@ declare function funct:tpl2( $app, $params ){
   let $getFile := function( $path, $xq ){ getData:getFile( $path, $xq ) }
   let $getData := 
     map{
-      'getFile' : $getFile
+      'getFile' : $getFile,
+      'getData' : function( $xquery, $params ){ getData:getData( $xquery, $params ) }
     }
   
   let $result :=
