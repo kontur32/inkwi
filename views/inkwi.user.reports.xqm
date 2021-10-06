@@ -4,6 +4,30 @@ import module namespace funct="funct" at "../functions/functions.xqm";
 
 declare 
   %rest:GET
+  %rest:path( "/unoi/отчеты/календарный-план" )
+  %output:method( "xhtml" )
+  %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
+function inkwi:планГрафик(){
+  let $содержание :=
+      map{
+        'раздел' : 'content/reports',
+        'страница' : "календарный-план"
+      }
+    
+    let $params :=    
+       map{
+        'header' : '',
+        'content' : funct:tpl2( 'content', $содержание ),
+        'footer' : funct:tpl2( 'footer', map{} )
+        
+       }
+    return
+      funct:tpl2( 'main', $params )
+};
+
+
+declare 
+  %rest:GET
   %rest:path( "/unoi/u/отчеты/{ $отчет }" )
   %output:method( "xhtml" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )

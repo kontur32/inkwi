@@ -5,7 +5,6 @@ import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateT
 declare function report:main( $params ){
    
    let $d :=
-     (: fetch:xml('http://iro37.ru:9984/unoi/api/v01/lists/courses')/data :)
      $params?_tpl( 'api/list-courses', map{} )/data
    
    let $data := $d//сводная

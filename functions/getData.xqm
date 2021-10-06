@@ -34,7 +34,13 @@ function
 {
    let $accessToken := 
     if( try{ session:get( 'accessToken' ) }catch*{ false() } )
-    then( session:get( 'accessToken' ) )
+    then(
+      getData:getToken(
+          $config:param( 'authHost' ),
+          $config:param( 'login' ),
+          $config:param( 'password' )
+        )
+    )
     else(
       getData:getToken(
           $config:param( 'authHost' ),

@@ -77,7 +77,17 @@ declare function vid:table( $i, $вид, $уровень){
           let $id :=
             if( $j/cell[ @label = 'Курс в Мудл']/text() )
             then(
-              <a class = "btn btn-success" href = "{ $j/cell[ @label = 'Курс в Мудл']/text() }">Посмотреть курс</a>
+              let $hrefSignUp :=
+                '/unoi/do/api/v01/user/signup/' ||
+                substring-after( $j/cell[ @label = 'Курс в Мудл']/text(), '?id=') || '/' ||
+                xs:string(
+                  dateTime:dateParse( $j/cell[ @label = 'Начало КПК']/text() )
+                )
+              return
+              (
+                <a class = "btn btn-info" href = "{ $j/cell[ @label = 'Курс в Мудл']/text() }">Посмотреть курс</a>,
+              <a class = "btn btn-success" href = "{ $hrefSignUp }">Записаться на курс</a>
+              )
             )
             else()
             
