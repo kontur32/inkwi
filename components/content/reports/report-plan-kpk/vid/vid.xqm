@@ -78,7 +78,7 @@ declare function vid:table( $i, $вид, $уровень){
             if( $j/cell[ @label = 'Курс в Мудл']/text() )
             then(
               let $hrefSignUp :=
-                '/unoi/do/api/v01/user/signup/' ||
+                '/unoi/do/api/v01/u/courses/signup/' ||
                 substring-after( $j/cell[ @label = 'Курс в Мудл']/text(), '?id=') || '/' ||
                 xs:string(
                   dateTime:dateParse( $j/cell[ @label = 'Начало КПК']/text() )
