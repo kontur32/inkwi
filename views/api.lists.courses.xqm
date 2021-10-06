@@ -8,6 +8,7 @@ module namespace inkwi = "inkwi";
 import module namespace funct="funct" at "../functions/functions.xqm";
 import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateTime.xqm';
 import module namespace config = "app/config" at "../functions/config.xqm";
+import module namespace getData = "getData" at "../functions/getData.xqm";
 
 declare 
   %rest:GET
@@ -18,8 +19,8 @@ function inkwi:cours( $id, $date as xs:date ){
     function( $id1, $date1 ){
       <data>
         <table>{
-          funct:tpl2( 'api/list-courses', map{ } )
-          /data/спискиКурсов/file/table/row
+          inkwi:allCourses()
+          /data/file/table/row
           [ cell [ @label = "Курс в Мудл"]/substring-after( text(), '?id=' ) =  $id1  ]
           [ cell [ @label = "Начало КПК"]/dateTime:dateParse( text() ) = xs:date( $date1 ) ]
         }</table>
@@ -34,7 +35,15 @@ declare
   %rest:path( "/unoi/api/v01/lists/courses" )
   %output:method( "xml" )
 function inkwi:allCourses(){
-  funct:tpl2( 'api/list-courses', map{ } )
+   getData:getData( 
+    config:param( 'host' ) || '/static/unoi/xq/coursesList.xq',
+    map{ 'cache' : '600' },
+    getData:getToken(
+      $config:param( 'authHost' ),
+      $config:param( 'login' ),
+      $config:param( 'password' )
+    )
+  )
 };
 
 declare function inkwi:getResource( $funct ){

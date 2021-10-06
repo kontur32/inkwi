@@ -9,45 +9,15 @@ declare function list-courses:main( $params as map(*) ){
     map{
       'списокКурсов' :
         <data>
-          <спискиКурсов>{ list-courses:курсы2( $params )  }</спискиКурсов>
+          <спискиКурсов>{ list-courses:всеКурсы( $params )  }</спискиКурсов>
           <сводная>{ $data }</сводная>
         </data>
          
     }
 };
 
-declare function list-courses:курсы2( $params ){
-  $params?_data?getData( $params?_config( 'host' ) || '/static/unoi/xq/coursesList.xq', map{} )
-  /data/file
-};
-
-declare function list-courses:курсы( $data, $params ){
-  let $кафедры := $data//table[ @label = 'Кафедры' ]
-  let $списокКурсов :=
-    for $i in $кафедры/row  
-    let $названиеКафедры :=
-      $i/cell[ @label = 'Название кафедры' ]/text()
-    let $курсыКафедры :=
-      $params?_data?getFile(
-        '/УНОИ/Кафедры/' || $названиеКафедры || '/Курсовые мероприятия кафедры.xlsx',  '.'
-      ) 
-    let $кафедра := 
-      <cell label = 'Кафедра'>{ $i/cell[ @label = 'Название кафедры' ]/text() }</cell>
-    return
-      <file>
-        <table>
-          {
-            for $j in $курсыКафедры//row
-            where 
-              if( map:contains( $params, '_filter' ) and map:contains( $params, 'courseID' )  )
-              then( $params?_filter( $j, $params?courseID ) )
-              else( true() )
-            return
-              $j update insert node $кафедра into .
-          }
-        </table>
-      </file>
-  
-  return
-    $списокКурсов
+declare function list-courses:всеКурсы( $params ){
+  $params?_data?getData(
+    $params?_config( 'host' ) || '/static/unoi/xq/coursesList.xq', map{ 'cache' : '300' }
+  )/data/file
 };
