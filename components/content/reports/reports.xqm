@@ -16,7 +16,7 @@ declare function reports:main( $params ){
     
     case "отчет-статистика-занятость"
       return
-        $params?_tpl( 'content/reports/report-statistic1', map{} )
+        $params?_tpl( 'content/reports/report-statistic', map{} )
     case "отчет-курсы"
       return
         $params?_tpl( 'content/reports/report-courses', map{} )

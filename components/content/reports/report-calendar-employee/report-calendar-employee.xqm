@@ -48,8 +48,10 @@ declare function report:main( $params ){
 declare function report:tables( $params, $начальнаяДата, $конечнаяДата ){
   let $календари :=
     $params?_tpl( 'api/list-calendar', $params )/data/мероприятия/row
+  
   let $сотрудники := 
     distinct-values( $календари/cell[ @label = 'Сотрудник' ]/text() ) 
+  
   let $строки := 
     for $i in $календари
     let $дата := $i/cell[ @label = 'Дата' ]/text()
