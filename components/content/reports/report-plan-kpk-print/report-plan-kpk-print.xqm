@@ -1,4 +1,4 @@
-module namespace report = 'content/reports/report-plan-kpk';
+module namespace report = 'content/reports/report-plan-kpk-print';
 
 import module namespace dateTime = 'dateTime' at 'http://iro37.ru/res/repo/dateTime.xqm';
 
@@ -37,13 +37,10 @@ declare function report:main( $params ){
         count $c
         return
           $params?_tpl(
-            'content/reports/report-plan-kpk/vid',
+            'content/reports/report-plan-kpk-print/vid',
             map{ 'вид' : $вид, 'номер' : $c, 'уровни' : $уровни, 'rows' : $i }
           )
    
    return
-     map{
-       'ссылкаПечать' : request:path() || '/печать',
-       'отчет' : $отчет
-     }
+     map{ 'отчет' : $отчет }
 };

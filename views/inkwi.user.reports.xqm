@@ -28,6 +28,25 @@ function inkwi:планГрафик(){
 
 declare 
   %rest:GET
+  %rest:path( "/unoi/u/отчеты/{ $отчет }/печать" )
+  %output:method( "xhtml" )
+  %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
+function inkwi:отчетыПечать($отчет as xs:string){
+  let $содержание :=
+      map{
+        'раздел' : 'content/reports',
+        'страница' : $отчет,
+        'query-params' : inkwi:query-params()
+      }
+    
+    let $params :=    
+       map{'content' : funct:tpl2( 'content', $содержание )}
+    return
+      funct:tpl2( 'main', $params )
+};
+
+declare 
+  %rest:GET
   %rest:path( "/unoi/u/отчеты/{ $отчет }" )
   %output:method( "xhtml" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
