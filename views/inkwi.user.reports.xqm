@@ -4,14 +4,20 @@ import module namespace funct="funct" at "../functions/functions.xqm";
 
 declare 
   %rest:GET
-  %rest:path( "/unoi/отчеты/календарный-план" )
+  %rest:path( "/unoi/p/отчеты/календарный-план" )
+  %rest:query-param('output', '{$output}', '')
   %output:method( "xhtml" )
   %output:doctype-public( "www.w3.org/TR/xhtml11/DTD/xhtml11.dtd" )
-function inkwi:планГрафик(){
+function inkwi:планГрафик($output){
+  let $страница :=
+    if($output='print')
+    then("календарный-план-печать")
+    else("календарный-план")
+  
   let $содержание :=
       map{
         'раздел' : 'content/reports',
-        'страница' : "календарный-план"
+        'страница' : $страница
       }
     
     let $params :=    
