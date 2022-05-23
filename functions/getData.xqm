@@ -78,6 +78,7 @@ function getData:getFile(  $fileName, $xq, $storeID, $access_token ){
    web:create-url(
      $config:param( 'api.method.getData' ) || '/stores/' ||  $storeID,
      map{
+       'nocache' : '1',
        'access_token' : $access_token,
        'path' : $fileName,
        'xq' : $xq

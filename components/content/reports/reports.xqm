@@ -32,6 +32,12 @@ declare function reports:main( $params ){
     case "календарный-план-печать"
       return
         $params?_tpl( 'content/reports/report-plan-kpk-print', map{} )
+    case "список-курсов"
+      return
+        $params?_tpl( 'content/reports/report-kpk-list', map{} )
+    case "расписание-курса"
+      return
+        $params?_tpl( 'content/reports/report-kpk-raspisanie', map{} )
     default 
       return
         fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/031fefd3-e1b6-4ce6-885b-601429101680' )//div[ @id = 'content' ]
