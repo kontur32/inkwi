@@ -67,8 +67,8 @@ function report-kpk-raspisanie:расписание($data){
           return
             <th>{$дата}</th>
         }
-        <th>Часов план</th>
-        <th>Часов факт</th>
+        <th class="text-center">Часов план</th>
+        <th class="text-center">Часов факт</th>
       </tr>
     let $строкиТем := 
       for $тема in $data/row
@@ -99,8 +99,8 @@ function report-kpk-raspisanie:расписание($data){
             return
               <td>{xs:date($дата)=$i??$записьЗанятие!!""}</td>
           }
-          <td>{$часовПлан}</td>
-          <td>{$продолжительность}</td>
+          <td class="text-center">{$часовПлан}</td>
+          <td class="text-center">{$продолжительность}</td>
         </tr>
   return
     ($заголовок, $строкиТем)
