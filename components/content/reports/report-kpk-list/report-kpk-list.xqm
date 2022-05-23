@@ -40,7 +40,7 @@ function report-kpk-list:всеСотрудники(
       }
     )
   return
-    <li><a href="{$href}">{$j}</a> ({$сотрудник}, "{$кафедра}")</li>
+    <li><a href="{$href}" target="_blank">{$j}</a> ({$сотрудник}, "{$кафедра}")</li>
 };
 
 declare 

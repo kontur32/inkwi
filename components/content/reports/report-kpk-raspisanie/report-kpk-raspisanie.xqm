@@ -115,11 +115,13 @@ function report-kpk-raspisanie:занятие($тема){
     let $времяОкончания := report-kpk-raspisanie:времяНачала($времяОкончанияЧислом)
     let $преподаватель :=  $тема/cell[@label="ФИО преподавателя"]/text()
     let $аудитория :=  $тема/cell[@label="Аудитория"]/text()
+    let $ссылка :=  $тема/cell[@label="Ссылка"]/text()
     return
       (
         <span>{$времяНачала} - {$времяОкончания}, </span>, 
         <span>{$преподаватель}, </span>,
-        <span>{$аудитория}</span>
+        <span>{$аудитория}</span>,
+        if($ссылка)then(<span><a href="{$ссылка}">ссылка</a></span>)else()
       )
 };
 
