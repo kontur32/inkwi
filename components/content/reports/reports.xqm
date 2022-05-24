@@ -38,6 +38,9 @@ declare function reports:main( $params ){
     case "расписание-курса"
       return
         $params?_tpl( 'content/reports/report-kpk-raspisanie', map{} )
+    case "список-сотрудников"
+      return
+        $params?_tpl('content/reports/report-employees-list', map{})
     default 
       return
         fetch:xml( 'http://iro37.ru:9984/zapolnititul/api/v2.1/data/publication/031fefd3-e1b6-4ce6-885b-601429101680' )//div[ @id = 'content' ]

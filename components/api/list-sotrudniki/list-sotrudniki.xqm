@@ -1,5 +1,8 @@
 module namespace list-sotrudniki = "api/list-sotrudniki";
 
+(:
+  возвращает список сотрудников
+:)
 declare function list-sotrudniki:main($params as map(*)){
     map{
       'сотрудники' :list-sotrudniki:сотрудники($params)

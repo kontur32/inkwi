@@ -9,15 +9,22 @@ declare function list-courses:main( $params as map(*) ){
     map{
       'списокКурсов' :
         <data>
-          <спискиКурсов>{ list-courses:всеКурсы( $params )  }</спискиКурсов>
-          <сводная>{ $data }</сводная>
+          <спискиКурсов>{list-courses:всеКурсы($params, $data) }</спискиКурсов>
+          <сводная>{$data}</сводная>
         </data>
-         
     }
 };
 
-declare function list-courses:всеКурсы( $params ){
-  $params?_data?getData(
-    $params?_config( 'host' ) || '/static/unoi/xq/coursesList.xq', map{ 'cache' : '300' }
-  )/data/file
+declare
+  %private
+function list-courses:всеКурсы($params, $data ) as element(file)* {
+  let $кафедры := 
+    $data//table[@label="Подразделения"]/row[cell[@label="Тип"]/text() = "Кафедра"]/cell[@label="Название"]/text()
+  for $кафедра in $кафедры
+  let $путь :=
+    replace(
+      "/УНОИ/Кафедры/%1/Курсовые мероприятия кафедры.xlsx","%1", $кафедра
+    )
+  return
+    $params?_data?getFile($путь, '.')//file
 };
