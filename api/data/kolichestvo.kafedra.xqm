@@ -7,15 +7,13 @@ declare
   %output:method('json')
   %rest:path( "/unoi/api/v01/data/reports/kurses/{ $mode }.kafedra" )
 function data:main( $mode ){
-   let $data := 
-    funct:tpl2( 'api/list-courses', map{} )/data
+  let $data := funct:tpl2( 'api/list-courses', map{} )/data
 
   let $курсы :=
     for $i in $data/спискиКурсов/file
     let $КПК := $i//row
-    
     let $результат :=
-      if( $mode = 'revenue' )
+      if($mode = 'revenue')
       then(
         sum(
           for-each(
@@ -27,9 +25,9 @@ function data:main( $mode ){
           )
         )
       )
-      else( count( $КПК ) )
+      else(count($КПК))
     
-    let $названиеКафедры := $КПК[ 1 ]/cell[ @label = 'Кафедра' ]/text()
+    let $названиеКафедры := $i/@подразделение/data()
     
     return
         <_ type = "array">

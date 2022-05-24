@@ -26,5 +26,6 @@ function list-courses:всеКурсы($params, $data ) as element(file)* {
       "/УНОИ/Кафедры/%1/Курсовые мероприятия кафедры.xlsx","%1", $кафедра
     )
   return
-    $params?_data?getFile($путь, '.')//file
+    $params?_data?getFile($путь, '.')//file 
+    update insert node attribute подразделение {$кафедра} into .
 };

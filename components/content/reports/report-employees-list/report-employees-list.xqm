@@ -4,9 +4,15 @@ module namespace report-employees-list = "content/reports/report-employees-list"
   формирует список сотрудников по подразделениям
 :)
 declare function report-employees-list:main($params as map(*)){
-    map{
-      'сотрудники' : report-employees-list:сотрудники($params?_tpl('api/list-departments', map{}), $params?_tpl('api/list-sotrudniki', map{}))
-    }
+    let $подразделенияДанные := $params?_tpl('api/list-departments', map{})
+    let $сотрудникиДанные := $params?_tpl('api/list-sotrudniki', map{})
+    let $сотрудники := 
+      report-employees-list:сотрудники(
+        $сотрудникиДанные,
+        $сотрудникиДанные
+      )
+    return
+      map{'сотрудники' : $сотрудники}
 };
 
 declare 
