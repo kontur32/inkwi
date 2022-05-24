@@ -8,7 +8,7 @@ declare function report-employees-list:main($params as map(*)){
     let $сотрудникиДанные := $params?_tpl('api/list-sotrudniki', map{})
     let $сотрудники := 
       report-employees-list:сотрудники(
-        $сотрудникиДанные,
+        $подразделенияДанные,
         $сотрудникиДанные
       )
     return
